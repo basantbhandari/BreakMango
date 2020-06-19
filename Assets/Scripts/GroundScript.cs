@@ -18,7 +18,7 @@ public class GroundScript : MonoBehaviour
             Destroy(colInfo.gameObject, destroyEveryThingWhichCollideGroundAfterCertainSeconds);
         }
        
-        Debug.Log("GroundScript : "+ colInfo.gameObject.name + ": hits the ground.");
+        Debug.Log("GroundScript ::  Objects that hits ground = " + colInfo.gameObject.name);
     }
 
 

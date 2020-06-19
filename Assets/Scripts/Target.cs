@@ -11,6 +11,7 @@ public class Target : MonoBehaviour
     [Header("Target Properties")]
     [SerializeField] GameObject hitEffect;
     [SerializeField] float mangoBranchLinkingForce = 4f;
+    [SerializeField] float hitEffectDestroyDelay = 2f;
    
 
     // to access score variable
@@ -34,7 +35,7 @@ public class Target : MonoBehaviour
         // instantiate and destroy the effect
         var hiteff = Instantiate(hitEffect, transform.position, Quaternion.identity);
         hiteff.transform.parent = GameObject.Find("EffectsHolder").transform;
-        Destroy(hiteff, 2f);
+        Destroy(hiteff, hitEffectDestroyDelay);
         GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
       
     }

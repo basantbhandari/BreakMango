@@ -19,17 +19,6 @@ public class Bullet : MonoBehaviour
     private bool isPressed = false;
 
 
-
-    void Start()
-    { 
-    
-    
-    }
-
-   
-    
-
-
     void Update()
     {
         MakingRadiousForBullet();
@@ -38,10 +27,7 @@ public class Bullet : MonoBehaviour
 
 
 
-  
 
-
-    // events
     void OnMouseDown()
     {
         isPressed = true;
@@ -59,33 +45,21 @@ public class Bullet : MonoBehaviour
     }
 
 
-    // enumerations
-
     IEnumerator Release()
     {
         yield return new WaitForSeconds(releaseTime);
         GetComponent<SpringJoint2D>().enabled = false;
         polyCollider2D.enabled = true;
         this.enabled = false;
-        Debug.LogWarning("Bullet: before calling method isBulletReleased : " + isBulletReleased);
         StartCoroutine(IsBulletReleasedEnabledAfterCertainSecondsCoroutine());
     }
-
-
 
 
     IEnumerator IsBulletReleasedEnabledAfterCertainSecondsCoroutine() 
     {
         yield return new WaitForSeconds(averageTimeInSecondBetweenBulletReleaseAndItsDestruction);
         isBulletReleased = true;
-        Debug.LogWarning("Bullet: insede enumerator isBulletReleased : " + isBulletReleased);
     }
-
-
-
-
-    // custom functions
-  
 
 
 
@@ -111,19 +85,6 @@ public class Bullet : MonoBehaviour
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

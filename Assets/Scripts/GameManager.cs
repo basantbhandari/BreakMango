@@ -31,14 +31,11 @@ public class GameManager : MonoBehaviour
 
     public int bulletTurnNumber = 1;
     public float score = 0;
-    private Bullet bulletObjInGameManager = new Bullet();
-    private MenuManager menuManagerObjectInGameManager = new MenuManager();
 
 
     private Bullet  bul;
     private bool doWeNeedToGetBulletComponent = true;
-    private float timeInSecondBetweenCollionToDestructionOfTarget = 7f;
-    private float timeInSecondBetweenTwoUIScaleAnimation = 3f;
+    private bool isReachedLevelIncremented;
 
 
 
@@ -51,90 +48,90 @@ public class GameManager : MonoBehaviour
         winCanvas.SetActive(false);
         loseCanvas.SetActive(false);
 
+      
     }
 
+
+    void Start()
+    {
+        isReachedLevelIncremented = false;
+        PlayerPrefsController.SetLevelReached(20);
+        Debug.Log(" Game manager :: At start = " +PlayerPrefsController.GetLevelReached());
+    }
 
 
 
 
     void Update()
     {
- 
-
         score = (totalNumberOfMango - GameObject.Find("Mangoes").transform.childCount);
         scoreText.text = ("Collected : " + score.ToString());
-        Debug.LogError("Score = " + score);
-
 
         // instantiate next bullet when first bullet get damages
         if (doWeNeedToGetBulletComponent)
         {
             BulletInstantiateByCondition();
+
         }
-        
-        Debug.Log("From GameManager update function and isBulletReleased: " + bul.isBulletReleased);
+
         if (bul.isBulletReleased)
         {
             if (bulletTurnNumber < totalNumberOfBullet)
             {
                 InstantiateNextBullet();
                 bulletTurnNumber += 1;
-               
-
             }
             else
             {
                 doWeNeedToGetBulletComponent = false;
             }
-            
-            Destroy(bul.gameObject);
             bul.isBulletReleased = false;
+            Destroy(bul.gameObject);
            
-        } 
-        
-        if (bulletTurnNumber >= totalNumberOfBullet && !FindObjectOfType<Bullet>())
-        {
-            // checking for number of mango destroyed and remaining;
-
-            if (GameObject.Find("Mangoes").transform.childCount == 0)
-            {
-                // load next level and level completed
-                Debug.LogError("load next level");
-                //menuManagerObjectInGameManager.LoadLevel_First();
-                winCanvas.SetActive(true);
-
-            }
-            else
-            {
-                // load the same level(retry) and level failed
-                Debug.LogError("load the same level(retry)");
-                //menuManagerObjectInGameManager.LoadLevel_First();
-                loseCanvas.SetActive(true);
-            }
-
         }
 
-
+        if (!isReachedLevelIncremented) {
+           StartCoroutine(CheckingForGameLoseAndWinConditions());
+        }
        
 
         BulletUIInstantiationForRemaining();
-        Debug.LogWarning("bullet turn number = "+ bulletTurnNumber);
-
-
-
-
+     
 
 
     }
 
+    IEnumerator CheckingForGameLoseAndWinConditions()
+    {
 
+        yield return new WaitForSeconds(2f);
+        if (GameObject.Find("Mangoes").transform.childCount == 0)
+        {
+               // load next level and level completed
+               int levelR = PlayerPrefsController.GetLevelReached();
+                winCanvas.SetActive(true);
+                Debug.LogError("GameManager :: Congratulation you win level number = " + levelR);
+                PlayerPrefsController.SetLevelReached((levelR + 1));
+                isReachedLevelIncremented = true;
+                Debug.LogError("GameManager :: now yow are in level number = " + (levelR + 1));
+            
+        }
 
+        if (bulletTurnNumber > totalNumberOfBullet || !FindObjectOfType<Bullet>())
+        {
+            if (score != totalNumberOfMango)
+            {
+                // load the same level and level failed
+                int levelR = PlayerPrefsController.GetLevelReached();
+                Debug.Log("GameManager :: loading the same level number = " + levelR);
+                loseCanvas.SetActive(true);
 
+            }
+        }
 
+    }
 
-
-
-
+   
     private void BulletInstantiateByCondition() 
     {
          bul = FindObjectOfType<Bullet>();
@@ -181,7 +178,6 @@ public class GameManager : MonoBehaviour
 
   public void InstantiateNextBullet()
   {
-        // instantiate new bullet at hook position
         if (bulletTurnNumber <= totalNumberOfBullet)
         {
             if (bulletPrefeb != null)
