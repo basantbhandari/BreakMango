@@ -13,7 +13,7 @@ public class LevelLoader : MonoBehaviour
     {
 
         int rl = SceneManager.GetActiveScene().buildIndex + 1;
-        if (rl >= 21) {
+        if (rl > 21) {
             gameCompletionCanvas.SetActive(true);
         } else
         {
@@ -23,6 +23,20 @@ public class LevelLoader : MonoBehaviour
           
     }
 
+    public void LoadCurrentReachedLevel()
+    {
+        int currentReLevel = PlayerPrefsController.GetLevelReached();
+        SceneManager.LoadScene(currentReLevel);
+    }
+
+
+    public void ResetTheGame()
+    {
+
+        PlayerPrefsController.SetLevelReached(1);
+        SceneManager.LoadScene(1);
+
+    }
 
     public void LoadStartMenu()
     {
@@ -60,7 +74,7 @@ public class LevelLoader : MonoBehaviour
     public void LoadLevelSelectorScene()
     {
         int currLevR = PlayerPrefsController.GetLevelReached();
-        print("LevelLoader :: current level number = "+ currLevR);
+        Debug.Log("LevelLoader :: current level number = "+ currLevR);
         SceneManager.LoadScene("LevelSelection");
     }
 

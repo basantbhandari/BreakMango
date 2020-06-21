@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject bulletPrefeb = null;
     [SerializeField] public GameObject mangoes = null;
     [SerializeField] int totalNumberOfMango;
+    [SerializeField] int maximumLevelNumber = 21;
 
 
     [Header("Game Conditions")]
@@ -55,7 +56,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         isReachedLevelIncremented = false;
-        PlayerPrefsController.SetLevelReached(20);
         Debug.Log(" Game manager :: At start = " +PlayerPrefsController.GetLevelReached());
     }
 
@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (!isReachedLevelIncremented) {
-           StartCoroutine(CheckingForGameLoseAndWinConditions());
+           CheckingForGameLoseAndWinConditions();
         }
        
 
@@ -101,22 +101,23 @@ public class GameManager : MonoBehaviour
 
     }
 
-    IEnumerator CheckingForGameLoseAndWinConditions()
+    void CheckingForGameLoseAndWinConditions()
     {
 
-        yield return new WaitForSeconds(2f);
+       
         if (GameObject.Find("Mangoes").transform.childCount == 0)
         {
                // load next level and level completed
                int levelR = PlayerPrefsController.GetLevelReached();
                 winCanvas.SetActive(true);
                 Debug.LogError("GameManager :: Congratulation you win level number = " + levelR);
-                PlayerPrefsController.SetLevelReached((levelR + 1));
+                if (levelR < maximumLevelNumber)
+                {
+                     PlayerPrefsController.SetLevelReached((levelR + 1));
+                }
                 isReachedLevelIncremented = true;
-                Debug.LogError("GameManager :: now yow are in level number = " + (levelR + 1));
-            
         }
-
+       
         if (bulletTurnNumber > totalNumberOfBullet || !FindObjectOfType<Bullet>())
         {
             if (score != totalNumberOfMango)
@@ -125,7 +126,6 @@ public class GameManager : MonoBehaviour
                 int levelR = PlayerPrefsController.GetLevelReached();
                 Debug.Log("GameManager :: loading the same level number = " + levelR);
                 loseCanvas.SetActive(true);
-
             }
         }
 

@@ -9,7 +9,7 @@ public class MenuManager : MonoBehaviour
    
     [SerializeField] GameObject volumeSlider;
     [SerializeField] GameObject panel;
-    [SerializeField] float defaultVolume = 0.5f;
+    [SerializeField] float defaultVolume = 0f;
 
     private bool isSliderOpened = false;
     private MusicPlayer musicPlayerRef;
@@ -71,12 +71,7 @@ public class MenuManager : MonoBehaviour
         Application.OpenURL("https://www.facebook.com/Yesicbap-107713864201843/?view_public_for=107713864201843");
     }
 
-    // TODO need to implement letter
-    public void ShareWithFriends()
-    {
-        Debug.Log("Menu Manager:: This will be implemented in the future");
-    
-    }
+
 
  
     public void OnPressedOnVolumnButton()

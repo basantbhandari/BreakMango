@@ -10,8 +10,8 @@ public class PlayerPrefsController : MonoBehaviour
     const float MIN_VOLUME = 0f;
     const float MAX_VOLUME = 1f;
 
-    const int MIN_LEVEL_REACHED = 0;
-    const int MAX_LEVEL_REACHED = 20;
+    const int MIN_LEVEL_REACHED = 1;
+    const int MAX_LEVEL_REACHED = 21;
 
     public static void SetMasterVolume(float volume)
     {
